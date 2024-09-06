@@ -1663,6 +1663,16 @@ dependencies = [
 [[package]]
 name = "leo-linter"
 version = "2.1.0"
+dependencies = [
+ "indexmap 1.9.3",
+ "leo-ast",
+ "leo-compiler",
+ "leo-errors",
+ "leo-package",
+ "leo-retriever",
+ "leo-span",
+ "snarkvm",
+]
 
 [[package]]
 name = "leo-package"

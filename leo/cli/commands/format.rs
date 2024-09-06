@@ -16,7 +16,28 @@
 
 use super::*;
 
-/// Clean outputs folder command
+use indexmap::IndexMap;
+use leo_ast::Stub;
+use leo_compiler::{Compiler, CompilerOptions};
+use leo_errors::{CliError, UtilError};
+use leo_retriever::{Manifest, NetworkName, Retriever};
+use leo_linter::Linter;
+use leo_span::Symbol;
+use leo_package::{build::BuildDirectory, outputs::OutputsDirectory, source::SourceDirectory};
+use std::fs;
+use snarkvm::prelude::CanaryV0;
+use std::{
+    io::Write,
+    path::{Path, PathBuf},
+    option::Option
+};
+use snarkvm::{
+    package::Package,
+    prelude::{MainnetV0, Network, ProgramID, TestnetV0},
+};
+
+
+
 #[derive(Parser, Debug)]
 pub struct Format {}
 
@@ -32,7 +53,18 @@ impl Command for Format {
         Ok(())
     }
 
-    fn apply(self, _: Context, _: Self::Input) -> Result<Self::Output> {
-        todo!()
+    fn apply(self, context: Context, _: Self::Input) -> Result<Self::Output> {
+        handle_format(&self, context)
     }
+}
+fn handle_format(command: &Format, context: Context) -> Result<<Format as Command>::Output> {
+    let package_path = context.dir()?;
+    let home_path = context.home()?;
+    let endpoint = String::from("https://api.explorer.aleo.org/v1");
+    let manifest = Manifest::read_from_dir(&package_path)?;
+    let program_id = ProgramID::<TestnetV0>::from_str(manifest.program())?;
+    let linter = Linter::<TestnetV0>::new(program_id, endpoint, package_path, home_path)
+    .map_err(|err| UtilError::failed_to_retrieve_dependencies(err, Default::default()))?;
+    linter.lint().expect("Failed to lint");
+    Ok(())
 }

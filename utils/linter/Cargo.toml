@@ -18,3 +18,34 @@ license = "GPL-3.0"
 edition = "2021"
 rust-version = "1.69"
 
+
+[dependencies.snarkvm]
+workspace = true
+
+[dependencies.leo-ast]
+path = "../../compiler/ast"
+version = "2.1.0"
+
+[dependencies.leo-span]
+path = "../../compiler/span"
+version = "2.1.0"
+
+[dependencies.leo-errors]
+path = "../../errors"
+version = "2.1.0"
+
+[dependencies.leo-compiler]
+path = "../../compiler/compiler"
+version = "2.1.0"
+
+[dependencies.leo-retriever]
+path = "../retriever"
+version = "2.1.0"
+
+[dependencies.indexmap]
+version = "1.9"
+features = [ "serde-1" ]
+
+[dependencies.leo-package]
+path = "../../leo/package"
+version = "2.1.0"
