@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with the Leo library. If not, see <https://www.gnu.org/licenses/>.
 
+
 use super::*;
 
 use indexmap::IndexMap;
@@ -65,6 +66,7 @@ fn handle_format(command: &Format, context: Context) -> Result<<Format as Comman
     let program_id = ProgramID::<TestnetV0>::from_str(manifest.program())?;
     let linter = Linter::<TestnetV0>::new(program_id, endpoint, package_path, home_path)
     .map_err(|err| UtilError::failed_to_retrieve_dependencies(err, Default::default()))?;
-    linter.lint().expect("Failed to lint");
+    linter.lint()?;
     Ok(())
 }
+
